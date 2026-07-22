@@ -21,11 +21,19 @@ Docs at http://127.0.0.1:8000/docs
 ```bash
 pytest tests/ -v
 ```
-5/5 tests pass as of last verified run.
+8/8 tests pass as of last verified run.
+
+## Auth
+Reads are open (`GET /use-cases`, `GET /use-cases/{id}`) — this is a shared reference
+library other tools in the toolkit consult freely, so browsing/searching it needs no key.
+Writes (`POST /use-cases`, `DELETE /use-cases/{id}`) require an `X-Admin-Key` header,
+configured via the `ADMIN_API_KEYS` env var as a comma-separated list of valid keys —
+otherwise any anonymous caller on the public internet could pollute or wipe this library.
 
 ## API
 - `POST /use-cases` — add a use case (title, industry, category, complexity, tags).
-- `GET /use-cases` — list, filterable by `industry`, `category`, `complexity`.
-- `GET /use-cases/{id}` — retrieve one.
-- `DELETE /use-cases/{id}` — remove one.
+  Requires `X-Admin-Key`.
+- `GET /use-cases` — list, filterable by `industry`, `category`, `complexity`. Open.
+- `GET /use-cases/{id}` — retrieve one. Open.
+- `DELETE /use-cases/{id}` — remove one. Requires `X-Admin-Key`.
 - `GET /health`
